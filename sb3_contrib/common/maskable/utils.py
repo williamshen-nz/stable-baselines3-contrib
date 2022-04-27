@@ -29,6 +29,9 @@ def is_masking_supported(env: GymEnv) -> bool:
 
     if isinstance(env, VecEnv):
         try:
+            print("Warning! We assume masking is supported for VecEnv")
+            return True
+
             # TODO: add VecEnv.has_attr()
             env.get_attr(EXPECTED_METHOD_NAME)
             return True
