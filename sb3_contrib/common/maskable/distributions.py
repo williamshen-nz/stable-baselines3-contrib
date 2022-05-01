@@ -62,7 +62,10 @@ class MaskableCategorical(Categorical):
         super().__init__(logits=logits)
 
         # self.probs may already be cached, so we must force an update
-        self.probs = logits_to_probs(self.logits)
+        # Add normalization as logits could potentialy not be normalized
+        # and that breaks things on the validation checks
+        probs = logits_to_probs(self.logits)
+        self.probs = probs / probs.sum(-1, keepdim=True)
 
     def entropy(self) -> th.Tensor:
         if self.masks is None:
